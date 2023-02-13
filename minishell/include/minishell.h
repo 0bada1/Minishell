@@ -163,6 +163,7 @@ char    		*get_next_word(char *str, int i);
 
 /*--------------------------------UTSIL5-------------------------------*/
 int				check_if_command(t_shell_s *minishell, char *token);
+int				get_num_flags(char **token, int i);
 
 /*---------------------------------FREE--------------------------------*/
 void		    free_everything(t_shell_s *minishell);

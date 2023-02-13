@@ -6,7 +6,7 @@
 /*   By: ooutabac <ooutabac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 19:19:57 by ooutabac          #+#    #+#             */
-/*   Updated: 2023/02/13 18:11:43 by ooutabac         ###   ########.fr       */
+/*   Updated: 2023/02/13 20:43:39 by ooutabac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,35 +44,41 @@ t_shell_s	*get_home(t_shell_s *minishell, char **envp)
 	return (minishell);
 }
 
-// t_shell_s	*get_commands(t_shell_s *minishell, char *str)
-// {
-// 	t_counter	count;
+t_shell_s	*get_commands(t_shell_s *minishell, char *str)
+{
+	t_counter	count;
 
-// 	count.i = 0;
-// 	count.j = 0;
-// 	count.k = 0;
-// 	count.m = 0;
-// 	count.trigger = 0;
-// 	if (!str || !minishell || !minishell->lexer)
-// 		return (minishell);
-// 	minishell = get_num_commands(minishell, str);
-// 	minishell->commands = ft_calloc(sizeof(char *), (minishell->num_commands + 1));
-// 	minishell->flags = malloc(sizeof(char **) * (minishell->num_commands + 1));
-// 	while (minishell->lexer->tokens[count.i])
-// 	{
-// 		count.trigger = 0;
-// 		if (ft_strncmp(minishell->lexer->tokens[count.i], "|", 2) != 0)
-// 			count.trigger = 1;
-// 		if ()
-// 		if (check_if_command(minishell, minishell->lexer->tokens[count.i]) == TRUE && count.trigger == 1)
-// 			minishell->commands[count.j++] = ft_strdup(minishell->lexer->tokens[count.i]);
-		
-// 	}
-// 	minishell->commands[count.j] = NULL;
-// 	for (int i = 0; i < minishell->num_commands; i++)
-// 		printf("command[%i] = %s\n", i, minishell->commands[i]);
-// 	return (minishell);
-// }
+	count.i = 0;
+	count.j = 0;
+	if (!str || !minishell || !minishell->lexer)
+		return (minishell);
+	minishell = get_num_commands(minishell, str);
+	minishell->commands = ft_calloc(sizeof(char *), (minishell->num_commands + 1));
+	minishell->flags = malloc(sizeof(char **) * (minishell->num_commands + 1));
+	while (minishell->lexer->tokens[count.i])
+	{
+		count.k = 0;
+		if (check_if_command(minishell, minishell->lexer->tokens[count.i]) == TRUE)
+		{
+			minishell->commands[count.j] = ft_strdup(minishell->lexer->tokens[count.i]);
+			minishell->flags[count.j] = ft_calloc(sizeof(char *), get_num_flags(minishell->lexer->tokens, count.i) + 1);
+			while (minishell->lexer->tokens[count.i] && ft_strncmp(minishell->lexer->tokens[count.i], "|", 2) != 0)
+				minishell->flags[count.j][count.k++] = ft_strdup(minishell->lexer->tokens[count.i++]);
+			minishell->flags[count.j++][count.k] = NULL;
+		}
+		while (minishell->lexer->tokens[count.i] && ft_strncmp(minishell->lexer->tokens[count.i], "|", 2) != 0)
+			count.i++;
+		if (minishell->lexer->tokens[count.i] && ft_strncmp(minishell->lexer->tokens[count.i], "|", 2) == 0)
+			count.i++;
+	}
+	minishell->commands[count.j] = NULL;
+	// for (int i = 0; i < minishell->num_commands; i++)
+	// 	printf("command[%i] = %s\n", i, minishell->commands[i]);
+	// for (int k = 0; k < minishell->num_commands; k++)
+	// 	for (int j = 0; j < get_num_flags(minishell->lexer->tokens, k) - 1; j++)
+	// 		printf("args[%i] = %s\n", j, minishell->flags[k][j]);
+	return (minishell);
+}
 
 t_shell_s	*get_num_commands(t_shell_s *minishell, char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: ooutabac <ooutabac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 11:29:43 by ooutabac          #+#    #+#             */
-/*   Updated: 2023/02/13 18:11:37 by ooutabac         ###   ########.fr       */
+/*   Updated: 2023/02/13 18:14:37 by ooutabac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_shell_s	*parse(char *str, char **envp)
 	minishell = lexer(minishell, str);
 	// if (check_validity(minishell) == FALSE)
 	// 	free_everything(minishell);
-	// minishell = get_commands(minishell, str);
+	minishell = get_commands(minishell, str);
 	return (minishell);
 }
 

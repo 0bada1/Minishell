@@ -6,7 +6,7 @@
 /*   By: ooutabac <ooutabac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 10:29:08 by ooutabac          #+#    #+#             */
-/*   Updated: 2023/02/10 17:33:23 by ooutabac         ###   ########.fr       */
+/*   Updated: 2023/02/13 18:43:54 by ooutabac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,3 +47,22 @@ int	check_if_command(t_shell_s *minishell, char *token)
 // 	}
 // 	return (TRUE);
 // }
+
+int	get_num_flags(char **token, int i)
+{
+	t_counter	count;
+
+	if (!token)
+		return (0);
+	count.counter = 0;
+	while (token[i])
+	{
+		if (ft_strncmp(token[i], "|", 2) != 0)
+			count.counter++;
+		else
+			break ;
+		i++;
+	}
+	printf("num of args = %i\n", count.counter);
+	return (count.counter);
+}
