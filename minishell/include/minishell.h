@@ -14,6 +14,8 @@
 # define TRUE 0
 # define FALSE 1
 
+extern char **environ;
+
 /* T_COUNTER
 - This struct is just for general use to save lines.
 It is used so I can easily pass multiple counters between functions and declare
@@ -64,9 +66,8 @@ typedef struct s_env_s
 
 /* T_SHELL_S
 This is the main and most important struct that contains everything
-
 * What is the scary triple pointer char ***flags?
-- This is related to char **commands. Flags contain every argument to every command
+- This is related to char **commands. flags contain every argument to every command
 The reason it is a triple pointer is the way it works. It is quite simple so don't be intimidated
 Example:
 minishell🤓$ ls -l -la -a | head -n5
@@ -79,18 +80,16 @@ flags[0][1] = "-l"
 flags[0][2] = "-a"
 flags[1][0] = "head"
 flags[1][1] = "-n5"
-flags[1][1][0] = '-'
-flags[1][1][1] = 'n'
-flags[1][1][2] = '5'
+flags[1][0][0] = '-'
+flags[1][0][1] = 'n'
+flags[1][0][2] = '5'
 and so on
-
 * How do I use flags and why do I need it?
-- Flags will be used in the second parameter of the function execve.
+- Flags will be used in the second parameter of the function execve
 execve will take the parameters as such: execve(commands[i], flags[i], envp);
 Commands and flags take the same counter. The reason this works is that execve
 takes (char *cmd, char **flags, char **envp). So we have an extra pointer on
 commands AND flags since we have a list of them.
-
 * What is pipe_fd and why is an int **?
 - Pipe_fd is a list of file descriptors. These file descriptors are from the external function pipe()
 They are int ** because we have a list of fds because we also have a list of commands
@@ -99,7 +98,6 @@ The second pointer is the read and write fds that are opened by pipe()
 You will be able to write the output of cmd1 into pipe[0][1] and then cmd2 will
 read the output of cmd1 as cmd2's input from pipe[0][0]. This is just an example, so
 it should work on any number of commands.
-
 * Things I will add later:
 - Infile and outfile must be int * since bash accepts more than one redirection of the same type
 in the same prompt
@@ -107,10 +105,10 @@ in the same prompt
 typedef struct s_shell_s
 {
     int		num_commands; // number of all commands
-    int		infile;  //file descriptor for redirect in file
-    int		outfile;  // file descriptor for redirect out file
     int		num_pipes;  // number of all pipes
     int 	pipe_num;     // number of pipe process (get it after split) (What is this? -Obada)
+    int		infile;  //file descriptor for redirect in file
+    int		outfile;  // file descriptor for redirect out file
 	int		**pipe_fd; // List of pipe file descriptors used to pipe() between commands
 	char	***flags;	// List of arguments of every command
     char	**commands; // Simple commands
@@ -125,24 +123,28 @@ typedef struct s_shell_s
 /*---------------------------------MAIN--------------------------------*/
 void ft_signal();
 void ft_ctrl_c();
+int	ft_echo(char **args);
+int	ft_env(char **env, char **args);
+int	ft_pwd(char **args);
+char	*ft_getenv(const char *name);
+int	ft_putenv(const char *string);
 
 /*--------------------------------OBADA--------------------------------*/
 /*-------------------------------PARSING-------------------------------*/
-t_shell_s		*parse(char *str, char **envp);
+t_shell_s		*parse(char *str, char *envp[]);
 
 /*--------------------------------UTSIL1-------------------------------*/
 int				skip_spaces(char *str, int i);
-int				skip_token(char *str, int i);
+int				skip_non_space(char *str, int i);
 char			*check_for_input(char *str);
 char			*check_for_output(char *str);
 int				ft_strlen_spaces(char *str, int i);
 int				count_pipes(char *str);
 
 /*--------------------------------UTSIL2-------------------------------*/
-t_shell_s		*get_path(t_shell_s	*minishell, char **envp);
-t_shell_s		*get_home(t_shell_s *minishell, char **envp);
+t_shell_s		*get_path(t_shell_s	*minishell, char *envp[]);
+t_shell_s		*get_home(t_shell_s *minishell, char *envp[]);
 t_shell_s		*get_commands(t_shell_s *minishell, char *str);
-t_shell_s		*get_num_commands(t_shell_s *minishell, char *str);
 
 /*--------------------------------UTSIL3-------------------------------*/
 t_shell_s		*lexer(t_shell_s *minishell, char *str);
@@ -152,7 +154,7 @@ int				number_of_dquotes(char *str);
 int				number_of_squotes(char *str);
 int				ft_strlen_dquotes(char *str, int i);
 int				ft_strlen_squotes(char *str, int i);
-// char			*dqouted_string(char *str, int i);
+char			*dqouted_string(char *str, int i);
 // char			*sqouted_string(char *str, int i); // NOT DONE
 void			print_struct(t_shell_s *args);
 

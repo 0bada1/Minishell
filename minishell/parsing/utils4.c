@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ooutabac <ooutabac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szubair <szubair@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 11:29:38 by ooutabac          #+#    #+#             */
-/*   Updated: 2023/02/12 19:20:40 by ooutabac         ###   ########.fr       */
+/*   Updated: 2023/02/13 18:28:55 by szubair          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int num_of_tokens(char *str)
 	{
 		if (str[count.i] != ' ' && str[count.i] != '\t')
 		{
-			count.i = skip_token(str, count.i);
+			//count.i = skip_token(str, count.i);
 			count.counter++;
 		}
 		count.i = skip_spaces(str, count.i);

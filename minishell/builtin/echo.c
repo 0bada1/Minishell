@@ -1,53 +1,54 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szubair <szubair@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/10 13:57:45 by szubair           #+#    #+#             */
+/*   Updated: 2023/02/10 14:40:32 by szubair          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+static int	ft_echoflag(char **args, int *i)
 {
-	size_t	i;
+	char	flag;
+	int		j;
 
-	i = 0;
-	while (s1[i] || s2[i])
+	flag = 1;
+	*i = 1;
+	while (args[*i] && args[*i][0] == '-')
 	{
-		if (s1[i] == s2[i])
-			i++;
+		j = 1;
+		while (args[*i][j] && args[*i][j] == 'n')
+			++j;
+		if (!args[*i][j] && args[*i][j - 1] == 'n')
+			flag = 0;
 		else
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+			break ;
+		*i = *i + 1;
 	}
-	return (0);
+	return (flag);
 }
 
-static int nb_args(char **args)
+int	ft_echo(char **args)
 {
-	int size;
-
-	size = 0;
-	while(args[size])
-		size++;
-	return (size);
-}
-
-int echo(char **args)
-{
-	int i;
-	int n_option;
+	char	flag;
+	int		i;
 
 	i = 1;
-	n_option = 0;
-	if (nb_args(args) > 1)
+	flag = ft_echoflag(args, &i);
+	while (args[i])
 	{
-		while (args[i] && ft_strcmp(args[i], "-n") == 0)
-		{
-			n_option = 1;
-			i++;
-		}
-		while (args[i])
-		{
-			ft_putstr_fd(args[i], 1);
-			if (args[i + 1] && args[i][0] != '\0')
-				write(1, " ", 1);
-			i++;
-		}
+		printf("%s", args[i]);
+		if (args[i + 1])
+			printf(" ");
+		++i;
 	}
-	if (n_option == 0)
-		write(1, "\n", 1);
+	if (flag)
+		ft_putstr_fd("\n", 1);
+	free(args);
 	return (0);
 }
