@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ooutabac <ooutabac@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szubair <szubair@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 17:48:06 by ooutabac          #+#    #+#             */
-/*   Updated: 2023/02/12 19:20:33 by ooutabac         ###   ########.fr       */
+/*   Updated: 2023/02/13 18:28:48 by szubair          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 // 	if (!str)
 // 		return (minishell);
 // 	minishell->lexer = ft_calloc(sizeof(t_lexer), 1);
-
 // 	minishell->lexer->num_of_dquotes = number_of_dquotes(str);
 // 	if (minishell->lexer->num_of_dquotes % 2 == 1)
 // 		return (printf("Minishell: Error: lexer--utils3.c: Odd number of quotes\n"), minishell);
@@ -175,9 +174,9 @@ t_shell_s		*lexer(t_shell_s *minishell, char *str)
 
 		// }
 		// if (count.i != is_symbol(str[count.i]) == FALSE)
-		count.i = skip_token(str, count.i);
-		// printf("count.i = %i\n", count.i);
-		count.i = skip_spaces(str, count.i);
+		//count.i = skip_token(str, count.i);
+		//// printf("count.i = %i\n", count.i);
+		//count.i = skip_spaces(str, count.i);
 	}
 	minishell->lexer->tokens[count.j] = NULL;
 	// for (int x = 0; minishell->lexer->tokens[x]; x++)
