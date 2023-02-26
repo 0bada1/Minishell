@@ -42,6 +42,7 @@ t_shell_s	*parse(char *str, char **envp)
 	if (minishell && minishell->lexer)
 		minishell->lexer->command_blocks = split_pipes(str);
 	minishell = get_redirections(minishell);
+	minishell = dollar_sign(minishell);
 	if (check_validity(minishell, str) == FALSE)
 	{
 		free_everything(minishell);

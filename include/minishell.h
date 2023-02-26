@@ -170,6 +170,7 @@ t_shell_s		*get_env_struct(t_shell_s *minishell, char *envp[]);
 t_shell_s		*get_commands(t_shell_s *minishell, char *str);
 t_shell_s		*get_num_commands(t_shell_s *minishell, char *str);
 t_shell_s		*get_command_blocks(t_shell_s *minishell, char *str);
+t_shell_s		*get_redirections(t_shell_s *minishell);
 
 /*--------------------------------UTSIL3-------------------------------*/
 t_shell_s		*lexer(t_shell_s *minishell, char *str);
@@ -198,6 +199,10 @@ t_shell_s		*raw_lexer(t_shell_s *minishell, char *str);
 int				raw_token_size(char *str, int i);
 char			**split_pipes(char	*str);
 int				length_to_pipe(char *str, int i);
+
+/*--------------------------------UTSIL7-------------------------------*/
+t_shell_s	   *dollar_sign(t_shell_s *minishell);
+t_shell_s	   *dollar_sign_env_variables(t_shell_s *minishell);
 
 /*---------------------------------FREE--------------------------------*/
 void		    free_everything(t_shell_s *minishell);

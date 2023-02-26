@@ -30,6 +30,7 @@ SRCS		=	src/main.c			\
 				parsing/utils4.c	\
 				parsing/utils5.c	\
 				parsing/utils6.c	\
+				parsing/utils7.c	\
 				parsing/free.c		\
 
 OBJS		=	$(SRCS:%c=%o)
@@ -78,19 +79,11 @@ $(LIBFT):
 
 clean:
 		@make -C $(LIBFT_DIR) fclean
-	$(RM) ./src/main.o				\
-	$(RM) ./builtin/echo.o			\
-	$(RM) ./parsing/parse.o			\
-	$(RM) ./parsing/utils1.o		\
-	$(RM) ./parsing/utils2.o		\
-	$(RM) ./parsing/utils3.o		\
-	$(RM) ./parsing/utils4.o		\
-	$(RM) ./parsing/utils5.o		\
-	$(RM) ./parsing/free.o
+	$(RM) ./*/*.o
 # $(RM) ./src/*.o
 # $(RM) ./parsing/*.o
 # $(RM) ./builtin/*.o
-			
+
 
 # @make -C $(GNL_DIR) fclean
 			@$(RM) $(OBJ_DIR)

@@ -47,6 +47,7 @@ t_shell_s	*get_home(t_shell_s *minishell, char **envp)
 t_shell_s	*get_env_struct(t_shell_s *minishell, char *envp[])
 {
 	t_counter	count;
+
 	if (!minishell)
 		return (NULL);
 	count.i = 0;
@@ -65,9 +66,11 @@ t_shell_s	*get_env_struct(t_shell_s *minishell, char *envp[])
 		minishell->envp.key[count.i] = malloc(sizeof(char) * ft_strlen_equals(envp[count.i]) + 1);
 		while (envp[count.i][count.j] && envp[count.i][count.j] != '=')
 		{
-			minishell->envp.key[count.i][count.j++] = envp[count.i][count.j];
+			minishell->envp.key[count.i][count.j] = envp[count.i][count.j];
+			count.j++;
 		}
-		minishell->envp.key[count.i][count.j++] = envp[count.i][count.j];
+		minishell->envp.key[count.i][count.j] = envp[count.i][count.j];
+		count.j++;
 		minishell->envp.key[count.i][count.j] = '\0';
 		minishell->envp.value[count.i] = ft_strchr(envp[count.i], '=') + 1;
 		// printf("key[%i] = %s\nvalue[%i] = %s\n", count.i, minishell->envp.key[count.i], count.i, minishell->envp.value[count.i]);
@@ -132,7 +135,7 @@ t_shell_s	*get_commands(t_shell_s *minishell, char *str)
 t_shell_s	*get_num_commands(t_shell_s *minishell, char *str)
 {
 	t_counter	count;
-	
+
 	count.i = 0;
 	count.trigger = 0;
 	count.counter = 0;
@@ -191,7 +194,7 @@ t_shell_s	*get_redirections(t_shell_s *minishell)
 	{
 		if (ft_strncmp(minishell->lexer->raw_tokens[count.i], "<\0", 2) == 0)
 		{
-			// minishell->files->filename[count.j] = ft_strdup(minishell->lexer->raw_tokens[count.i + 1]); 
+			// minishell->files->filename[count.j] = ft_strdup(minishell->lexer->raw_tokens[count.i + 1]);
 		}
 		count.i++;
 	}
