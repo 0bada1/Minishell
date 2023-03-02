@@ -15,33 +15,15 @@
 t_shell_s	*parse(char *str, char **envp)
 {
 	t_shell_s	*minishell;
-	char		*str1;
-	char		*str2;
 
 	minishell = ft_calloc(sizeof(t_shell_s), 1);
-	str1 = check_for_input(str);
-	str2 = check_for_output(str);
-	if (str1 != NULL)
-	{
-		minishell->infile = open(str2, F_OK | X_OK | O_RDONLY, 0777);
-		free(str1);
-	}
-	if (str2 != NULL)
-	{
-		minishell->outfile = open(str1, F_OK | X_OK | O_RDWR | O_TRUNC, 0777);
-		free(str2);
-	}
 	minishell->cmd_line = ft_strdup(str);
-	// printf("count_pipes = %i\n", count_pipes(str));
-	// minishell = get_command_blocks(minishell, str);
 	minishell = get_path(minishell, envp);
-	minishell = get_home(minishell, envp);
 	minishell = get_env_struct(minishell, envp);
 	minishell = lexer(minishell, str);
 	minishell = raw_lexer(minishell, str);
 	if (minishell && minishell->lexer)
 		minishell->lexer->command_blocks = split_pipes(str);
-	minishell = get_redirections(minishell);
 	minishell = dollar_sign(minishell);
 	if (check_validity(minishell, str) == FALSE)
 	{
@@ -49,7 +31,12 @@ t_shell_s	*parse(char *str, char **envp)
 		printf("Error: Syntax\n");
 		return (NULL);
 	}
-	minishell = get_commands(minishell, str);
+	minishell->num_pipes = count_pipes(str);
+	minishell = get_num_commands(minishell);
+	minishell = get_commands(minishell);
+	minishell = get_flags(minishell);
+	// minishell = get_execution_blocks(minishell);
+	// minishell->command_blocks = get_redirections(minishell);
 	return (minishell);
 }
 

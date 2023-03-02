@@ -71,18 +71,41 @@ typedef struct s_lexer
 
 typedef struct s_env_s
 {
-    int		env_size;
-    char	**envp;
-    char	**key;
-    char	**value;
+    int				env_size; // Number of environment variables
+    char			*envp; // Contains all environment variables
+    char			*key; // Contains the key name of each environment variable
+    char			*value; // Contains the body value of each environment variable
+	struct	s_env_s	*next; // Next environment variable as a linked list
 }t_env_s;
 
 typedef struct s_files
 {
-	int		**infile;
-	int		**outfile;
-	char	**filename;
+    int     num_of_redirections; // Number of redirections in command block
+    int     infile_fd; // Last infile in the command block
+    int     outfile_fd; // Last outfile in the command block
+	int		append_fd; // Last append file descriptor in command block, opened with the ">>"
+	int		heredoc_fd; // Last heredoc file descriptor in command block, opened with the "<<"
+    char    **infile_name; // List of all infile filename
+    char    **outfile_name; // List of all outfile filenames
+	char	**append_name; // List of all append filenames
+    char    **limter; // Limiter of the heredoc
+    char    *redirect_type; // Contains the order of the redirections.
+	/*	'>' = infile
+		'<' = outfile
+		'a' = Append which is ">>"
+		'h' = Heredoc which is "<<"
+	*/
 }t_files;
+
+typedef struct s_execute
+{
+    int		num_commands; // Contains the number of all commands
+    int		num_pipes; // Contains the number of all pipes
+    char	*command; // Contains the command itself in the command block
+    char	**args; // Contains all arguments in the command block
+    t_files	*files; // Contains all the files and redirections in the command block
+    t_env_s	*env; // Contains all the environment variables
+}t_execute; // This is the executor's struct. It is stored as a double pointer struct in t_shell, each pointer representing a command block
 
 /* T_SHELL_S
 This is the main and most important struct that contains everything
@@ -98,7 +121,8 @@ commands[1] = "head"
 Here flags will store the arguments for every command
 flags[0][0] = "ls"
 flags[0][1] = "-l"
-flags[0][2] = "-a"
+flags[0][2] = "-la"
+flags[0][3] = "-a"
 flags[1][0] = "head"
 flags[1][1] = "-n5"
 flags[1][1][0] = '-'
@@ -128,21 +152,17 @@ in the same prompt
 */
 typedef struct s_shell_s
 {
-    int		num_commands; // number of all commands
-    int		infile;  //file descriptor for redirect in file
-    int		outfile;  // file descriptor for redirect out file
-    int		num_pipes;  // number of all pipes
-    int 	pipe_num;     // number of pipe process (get it after split) (What is this? -Obada)
-	int		**pipe_fd; // List of pipe file descriptors used to pipe() between commands
-	char	***flags;	// List of arguments of every command
-    char	**commands; // Simple commands
-    char	**path;    // a path for the list of path direcotories separeted by ':' (DONE)
-    char	*home;  //  a path for a home directory (DONE)
-    char	*cmd_line; // read the command line (DONE)
-    t_env_s	envp;	// Has data about environment variables
-	t_lexer	*lexer;	// Used for tokenisation. Has tokens with quotes and without.
-	t_files	*files;	// Has all infiles and outfiles for every command block
-}   t_shell_s;
+    int			num_commands; // number of all commands
+    int			num_pipes;  // number of all pipes
+	char		***flags;	// List of arguments of every command
+    char		**commands; // Simple commands
+    char		**path;    // a path for the list of path direcotories separeted by ':' (DONE)
+    char		*cmd_line; // read the command line (DONE)
+    t_env_s		*envp;	// Has data about environment variables
+	t_lexer		*lexer;	// Used for tokenisation. Has tokens with quotes and without.
+	t_files		*files;	// Has all infiles and outfiles for every command block
+	t_execute	**command_block; // Has all the necessary data for execution on each command block
+}t_shell_s;
 
 /*--------------------------------SAMIYA-------------------------------*/
 /*---------------------------------MAIN--------------------------------*/
@@ -167,10 +187,11 @@ int				ft_strlen_equals(char *str);
 t_shell_s		*get_path(t_shell_s	*minishell, char **envp);
 t_shell_s		*get_home(t_shell_s *minishell, char **envp);
 t_shell_s		*get_env_struct(t_shell_s *minishell, char *envp[]);
-t_shell_s		*get_commands(t_shell_s *minishell, char *str);
-t_shell_s		*get_num_commands(t_shell_s *minishell, char *str);
+t_shell_s		*get_flags(t_shell_s *minishell);
+t_shell_s		*get_commands(t_shell_s *minishell);
+t_shell_s		*get_num_commands(t_shell_s *minishell);
 t_shell_s		*get_command_blocks(t_shell_s *minishell, char *str);
-t_shell_s		*get_redirections(t_shell_s *minishell);
+t_execute		*get_files(t_shell_s *minishell);
 
 /*--------------------------------UTSIL3-------------------------------*/
 t_shell_s		*lexer(t_shell_s *minishell, char *str);
@@ -190,7 +211,7 @@ int				token_size(char *str, int i);
 char    		*get_next_word(char *str, int i);
 
 /*--------------------------------UTSIL5-------------------------------*/
-int				check_if_command(t_shell_s *minishell, char *token);
+int				check_if_command(t_shell_s *minishell, char *token, int token_num);
 int				get_num_flags(char **token, int i);
 int				check_validity(t_shell_s *minishell, char *str);
 

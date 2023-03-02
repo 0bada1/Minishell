@@ -443,7 +443,6 @@ void	print_struct(t_shell_s *args)
 	// 	printf("%s\n", args->cmd_noflag[counter.k++]);
 	// printf("\nPRINTING FULL PATH:\n%s\n", args->full_path);
 	printf("\nPRINTING HOME:\n");
-	printf("%s\n", args->home);
 	printf("\nPRINTING SPLIT PATHS:\n");
 	while (args->path[counter.m])
 		printf("%s\n", args->path[counter.m++]);

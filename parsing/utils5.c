@@ -12,19 +12,14 @@
 
 #include "../include/minishell.h"
 
-int	check_if_command(t_shell_s *minishell, char *token)
+int	check_if_command(t_shell_s *minishell, char *token, int	token_num)
 {
-	t_counter	count;
-
 	if (!minishell || !token)
 		return (FALSE);
-	count.i = 0;
-	while (token[count.i])
-	{
-		if (token[count.i] == '>' || token[count.i] == '<' || token[count.i] == '\"' || token[count.i] == '\'' || token[count.i] == '|' || token[count.i] == '$')
-			return (FALSE);
-		count.i++;
-	}
+	if (ft_strncmp(token, ">\0", 2) == 0 || ft_strncmp(token, "<\0", 2) == 0 || ft_strncmp(token, "|\0", 2) == 0)
+		return (FALSE);
+	if (token_num > 0 && (ft_strncmp(minishell->lexer->raw_tokens[token_num - 1], ">\0", 2) == 0 || ft_strncmp(minishell->lexer->raw_tokens[token_num - 1], "<\0", 2) == 0))
+		return (FALSE);
 	return (TRUE);
 }
 
@@ -32,7 +27,7 @@ int	check_if_command(t_shell_s *minishell, char *token)
 // {
 // 	t_counter	count;
 // 	char		*token;
-	
+
 // 	count.i = 0;
 // 	count.trigger = 0;
 // 	while (minishell->lexer->tokens[count.i])
@@ -57,9 +52,11 @@ int	get_num_flags(char **token, int i)
 	count.counter = 0;
 	while (token[i])
 	{
-		if (ft_strncmp(token[i], "|", 2) != 0)
+		if ((ft_strncmp(token[i], ">\0", 2) == 0 || ft_strncmp(token[i], "<\0", 2) == 0))
+			i++;
+		else if (ft_strncmp(token[i], "|\0", 2) != 0)
 			count.counter++;
-		else
+		else if (ft_strncmp(token[i], "|\0", 2) == 0)
 			break ;
 		i++;
 	}
@@ -103,7 +100,7 @@ int	check_validity(t_shell_s *minishell, char *str)
 		// Nothing after a redirection
 		if ((ft_strncmp(minishell->lexer->raw_tokens[count.i], ">\0", 2) == 0 || ft_strncmp(minishell->lexer->raw_tokens[count.i], "<\0", 2) == 0) && !minishell->lexer->raw_tokens[count.i + 1])
 			return (FALSE);
-		// 2 redirections of different types 
+		// 2 redirections of different types
 		if (ft_strncmp(minishell->lexer->raw_tokens[count.i], "<\0", 2) == 0 && ft_strncmp(minishell->lexer->raw_tokens[count.i + 1], ">\0", 2) == 0)
 			return (FALSE);
 		if (ft_strncmp(minishell->lexer->raw_tokens[count.i], ">\0", 2) == 0 && ft_strncmp(minishell->lexer->raw_tokens[count.i + 1], "<\0", 2) == 0)

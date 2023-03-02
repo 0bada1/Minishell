@@ -98,7 +98,7 @@ int	raw_token_size(char *str, int i)
     length = 0;
     i = skip_spaces(str, i);
     while (str[i] && (str[i] != ' ' && str[i] != '\t'))
-    { 
+    {
 		trigger = 0;
 		if (str[i] == '\'')
 		{
@@ -188,12 +188,11 @@ char	**split_pipes(char	*str)
 		}
 		blocks[count.j++][count.k] = '\0';
 	}
-	// printf("block[%i] = %s\n", count.j, blocks[0]);
 	blocks[count.j] = NULL;
 	for (int i = 0; blocks[i]; i++)
 		printf("block[%i] = %s\n", i, blocks[i]);
 	return (blocks);
-} 
+}
 
 int	length_to_pipe(char *str, int i)
 {

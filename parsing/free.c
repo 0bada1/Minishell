@@ -33,8 +33,6 @@ void    free_everything(t_shell_s *minishell)
             free(minishell->commands[count.i++]);
         free(minishell->commands);
     }
-    if (minishell->home != NULL)
-        free(minishell->home);
     if (minishell->path != NULL)
     {
         while (minishell->path[count.j])

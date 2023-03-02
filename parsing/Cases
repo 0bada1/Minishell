@@ -63,7 +63,7 @@ minishell$ |>
 minishell$ <infile|
 minishell$ |>outifile
 minishell$ <infile|>outfile
-minishell$ 
+minishell$
 
 **DOLLAR SIGN**
 
@@ -73,3 +73,4 @@ minishell$
 **THINGS TO FIX**
 minishell$ obada"obada " (the space is causing seg fault reason is the skip_token doesn not work properly) (NOT DONE)
 minishell$ obada "obada"obada (obada after the quotes is not being saved in token) (DONE)
+
