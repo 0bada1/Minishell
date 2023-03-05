@@ -1,0 +1,113 @@
+cd**CASES**
+1) No input
+2) Normal commands with no input
+3) Normal commands with input
+4) Normal commands with invalid input
+5) Normal commands with more than one input
+6) Normal commands with redirections
+
+
+-Commands with no pipes
+*./minishell*
+minishell$
+minishell$ ls
+minishell$ ls -l
+minishell$ ls -la -a
+minishell$ echo hello
+minishell$ echo hello world
+minishell$ echo hello world (<-- non breaking space)
+minishell$ echohelloworld
+minishell$ echo "hello world"
+minishell$ echo 'hello world'
+minishell$ echo "hello" world
+minishell$ echo 'hello' world
+minishell$ echo hello "world"
+minishell$ echo hello 'world'
+minishell$ echo "hello 'world'"
+minishell$ echo 'hello "world"'
+minishell$ cat infile
+minishell$ < infile cat
+minishell$ cat < infile
+minishell$ infile cat
+
+minishell$ < infile cat | head > outfile
+minishell$ < infile "cat" | head > outfile
+minishell$ cat wc -l
+
+**DOUBLE QUOTES**
+minishell$ " " (DONE)
+minishell$ "Hello world" (DONE)
+minishell$ "  Is this working?" (DONE)
+minishell$ "Is this working?    " (DONE)
+minishell$ "  Is this working?  " (DONE)
+minishell$ "Is    this      working?" (DONE)
+minishell$ hello there "is this working?" (DONE)
+minishell$ hello there"is this working?" (DONE)
+minishell$ hello there"  is this working?" (DONE)
+minishell$ hello there"is this working?  " (DONE)
+minishell$ hello there"  " (DONE)
+minishell$ "" "  "  """" (DONE)
+minishell$ ""  """ "" " (DONE)
+minishell$ "" "  "  """" " (DONE)"
+minishell$ "hello""hello""hello""hello""hello""hello" (DONE)"
+minishell$ hello there"is this working? (DONE)
+
+**PIPES**
+minishell$ |
+minishell$ ||
+minishell$ |hi
+minishell$ hi|hello
+minishell$ hi || hello
+minishell$ <|
+minishell$ |>
+minishell$ <infile|
+minishell$ |>outifile
+minishell$ <infile|>outfile
+minishell$
+
+**DOLLAR SIGN**
+
+
+**SIGNALS**
+
+**THINGS TO FIX**
+minishell$ obada"obada " (the space is causing seg fault reason is the skip_token doesn not work properly) (NOT DONE)
+minishell$ obada "obada"obada (obada after the quotes is not being saved in token) (DONE)
+
+
+
+Structs prototype
+/*
+typedef struct s_shell_s
+{
+    int		    num_commands; // number of all commands
+    int		    num_pipes;  // number of all pipes
+    char	    **path;    // a path for the list of path direcotories separeted by ':' (DONE)
+    char	    *cmd_line; // read the command line (DONE)
+    t_env_s	    envp;	// Has data about environment variables
+	t_lexer	    *lexer;	// Used for tokenisation. Has tokens with quotes and without.
+    t_execute   **command_blocks // has execution data for every command block
+}   t_shell_s;
+
+typedef struct s_execute
+{
+    int     num_commands;
+    int     num_pipes;
+    char    **args;
+    char    *command;
+    t_files *files;
+    t_env   *env;
+}t_execute;
+
+typedef struct s_files
+{
+    int     num_of_redirections;
+    char    **infile_name;
+    char    **outfile_name;
+    int     infile_fd;
+    int     outfile_fd;
+    char    *here_doc;
+    char    *limter;
+    char    *redirect_type;
+}
+*/
